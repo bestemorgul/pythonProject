@@ -11,23 +11,30 @@ class WebPush:
     def send_push(self):
         print(f"{self.push_type} Push gönderildi!")
 
+
 class TriggerPush(WebPush):
-    def __init__(self, platform, optin, global_frequency_capping, start_date, end_date, language, push_type, trigger_page):
+    def __init__(self, platform, optin, global_frequency_capping, start_date, end_date, language, push_type,
+                 trigger_page):
         super().__init__(platform, optin, global_frequency_capping, start_date, end_date, language, push_type)
         self.trigger_page = trigger_page
+
 
 class BulkPush(WebPush):
     def __init__(self, platform, optin, global_frequency_capping, start_date, end_date, language, push_type, send_date):
         super().__init__(platform, optin, global_frequency_capping, start_date, end_date, language, push_type)
         self.send_date = send_date
 
+
 class SegmentPush(WebPush):
-    def __init__(self, platform, optin, global_frequency_capping, start_date, end_date, language, push_type, segment_name):
+    def __init__(self, platform, optin, global_frequency_capping, start_date, end_date, language, push_type,
+                 segment_name):
         super().__init__(platform, optin, global_frequency_capping, start_date, end_date, language, push_type)
         self.segment_name = segment_name
 
+
 class PriceAlertPush(WebPush):
-    def __init__(self, platform, optin, global_frequency_capping, start_date, end_date, language, push_type, price_info, discount_rate):
+    def __init__(self, platform, optin, global_frequency_capping, start_date, end_date, language, push_type, price_info,
+                 discount_rate):
         super().__init__(platform, optin, global_frequency_capping, start_date, end_date, language, push_type)
         self.price_info = price_info
         self.discount_rate = discount_rate
@@ -35,6 +42,7 @@ class PriceAlertPush(WebPush):
     def discountPrice(self):
         discounted_price = self.price_info * (1 - self.discount_rate)
         return discounted_price
+
 
 class InstockPush(WebPush):
     def __init__(self, platform, optin, global_frequency_capping, start_date, end_date, language, push_type, stock_info):
@@ -44,7 +52,6 @@ class InstockPush(WebPush):
     def stockUpdate(self):
         self.stock_info = not self.stock_info
         return self.stock_info
-
 
 
 trigger_push = TriggerPush("Android", True, 2, "2023-09-10", "2023-09-15", "English", "Trigger", "home")
