@@ -1,4 +1,4 @@
 # This is a test file
-# singlepageqa should trigger the check
+# setupwizard should trigger the check
 
 
