@@ -1,4 +1,4 @@
 # This is a test file
-# seleniumautomation seleniumautomation1 seleniumautomation2  should trigger the check
+# websuitetest1 websuitetest2  should trigger the check
 
 
