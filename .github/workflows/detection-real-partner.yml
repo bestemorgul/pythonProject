@@ -26,7 +26,6 @@ jobs:
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
-        # Define the partner names to check
         partners=(
           "inshoppingcart" "gluautomation1" "gluautomation2" "gluautomation3" "gluautomation4"
           "mobileautomation" "mobileautomation2" "mobileautomation3" "mobileautomation4" "mobileautomation5"
@@ -37,14 +36,13 @@ jobs:
           "shopbagg" "newsletteruat" "setupwizard" "hellokitty" "roiautomation"
         )
         
-        # Initialize a variable to track if any forbidden partner names are found
         forbidden_partner_found=false
+
+        IFS=$'\n' read -r -d '' -a changed_files <<< "$ALL_CHANGED_FILES"
         
-        # Loop through each changed file
         for file in "${changed_files[@]}"; do
           echo "Checking $file"
           
-          # Loop through each partner name
           for partner in "${partners[@]}"; do
             if grep -q "$partner" "$file"; then
               echo "Forbidden partner name '$partner' found in $file"
@@ -53,7 +51,6 @@ jobs:
           done
         done
         
-        # Exit with an error if any forbidden partner names are found
         if [ "$forbidden_partner_found" = true ]; then
           echo "One or more forbidden partner names found in the files."
           exit 1
