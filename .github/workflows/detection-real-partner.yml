@@ -40,9 +40,6 @@ jobs:
         # Initialize a variable to track if any forbidden partner names are found
         forbidden_partner_found=false
         
-        # Convert the environment variable to an array
-        IFS=$'\n' read -r -d '' -a changed_files <<< "$ALL_CHANGED_FILES"
-        
         # Loop through each changed file
         for file in "${changed_files[@]}"; do
           echo "Checking $file"
