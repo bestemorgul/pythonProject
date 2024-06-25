@@ -1,0 +1,66 @@
+name: Check Partner Names
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-partners:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v36
+      with:
+        files: |
+          **
+
+    - name: Check for specific partner names in changed files
+      env:
+        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+      run: |
+        # Define the partner names to check
+        partners=(
+          "inshoppingcart" "gluautomation1" "gluautomation2" "gluautomation3" "gluautomation4"
+          "mobileautomation" "mobileautomation2" "mobileautomation3" "mobileautomation4" "mobileautomation5"
+          "qaautomation1" "qaautomation2" "qaautomation3" "qaautomation4" "qaautomation5" "roiautomation"
+          "seleniumautomation" "seleniumautomation1" "seleniumautomation2" "seleniumautomation3" "sideautomation"
+          "sideautomation1" "sideautomation2" "sideautomation3" "sideautomation4" "sideautomation5" "eurekatest"
+          "websuitetest1" "websuitetest2" "websuitetest3" "vikingsankara" "singlepageqa" "ozaspava" "testqa"
+          "shopbagg" "newsletteruat" "setupwizard" "hellokitty" "roiautomation"
+        )
+        
+        # Initialize a variable to track if any forbidden partner names are found
+        forbidden_partner_found=false
+        
+        # Convert the environment variable to an array
+        IFS=$'\n' read -r -d '' -a changed_files <<< "$ALL_CHANGED_FILES"
+        
+        # Loop through each changed file
+        for file in "${changed_files[@]}"; do
+          echo "Checking $file"
+          
+          # Loop through each partner name
+          for partner in "${partners[@]}"; do
+            if grep -q "$partner" "$file"; then
+              echo "Forbidden partner name '$partner' found in $file"
+              forbidden_partner_found=true
+            fi
+          done
+        done
+        
+        # Exit with an error if any forbidden partner names are found
+        if [ "$forbidden_partner_found" = true ]; then
+          echo "One or more forbidden partner names found in the files."
+          exit 1
+        else
+          echo "No forbidden partner names found in the files."
+        fi
+      shell: bash
