@@ -1,2 +1,2 @@
 # This is a test file
-#shopbagg and newsletteruat trigger
+#gluautomation2 and gluautomation3
