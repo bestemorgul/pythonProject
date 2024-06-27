@@ -43,7 +43,7 @@ jobs:
         IFS=$'\n' read -r -d '' -a changed_files <<< "$ALL_CHANGED_FILES"
 
         echo "Changed files: ${changed_files[@]}"
-      
+
         for file in "${changed_files[@]}"; do
           echo "Checking $file"
           approved_partner_found=false
