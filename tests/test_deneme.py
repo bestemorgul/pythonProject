@@ -1,5 +1,5 @@
 class TestCheckSmartJourneySelectChannel():
-    settings.env_variables[SettingKeys.PARTNER_NAME] = qaautomation2
+    settings.env_variables[SettingKeys.PARTNER_NAME] = "qaautomation2"
     """Test case is:
 
        1. Click Create button in architect page
