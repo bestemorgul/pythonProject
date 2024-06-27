@@ -21,7 +21,7 @@ class TestCheckSmartJourneySelectChannel():
         self.campaign_name = self.generate_campaign_name()
         self.user_id = self.create_random_string(7)
 
-    #     settings.env_variables[SettingKeys.PARTNER_NAME] = "qaautomation1"
+    #     settings.env_variables[SettingKeys.PARTNER_NAME] = "qaautomation2"
 
     def tearDown(self):
         self.driver.quit()
