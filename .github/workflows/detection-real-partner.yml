@@ -1,4 +1,4 @@
-name: Check Partner Names
+name: Detection Real Partners
 
 on:
   pull_request:
@@ -15,14 +15,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Get changed files
+    - name: Get changed test files
       id: changed-files
       uses: tj-actions/changed-files@v36
       with:
         files: |
-          **
+          tests/**/*.py
 
-    - name: Check for specific partner names in changed files
+    - name: Print changed files
+      run: echo "${{ steps.changed-files.outputs.all_changed_files }}"
+
+    - name: Check for real partner names in changed test files
+      if: steps.changed-files.outputs.all_changed_files != ''
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
@@ -35,24 +39,37 @@ jobs:
           "websuitetest1" "websuitetest2" "websuitetest3" "vikingsankara" "singlepageqa" "ozaspava" "testqa"
           "shopbagg" "newsletteruat" "setupwizard" "hellokitty" "roiautomation"
         )
-        
-        forbidden_partner_found=false
-        
+
+        IFS=$'\n' read -r -d '' -a changed_files <<< "$ALL_CHANGED_FILES"
+
+        echo "Changed files: ${changed_files[@]}"
+      
         for file in "${changed_files[@]}"; do
           echo "Checking $file"
+          approved_partner_found=false
           
-          for partner in "${partners[@]}"; do
-            if grep -q "$partner" "$file"; then
-              echo "Forbidden partner name '$partner' found in $file"
-              forbidden_partner_found=true
+          if grep -q 'settings\.env_variables\[SettingKeys\.PARTNER_NAME\]\s*=\s*"' "$file"; then
+            partner_in_file=$(grep -oP 'settings\.env_variables\[SettingKeys\.PARTNER_NAME\]\s*=\s*"\K[^"]+' "$file")
+            echo "Partner found in $file: $partner_in_file"
+
+            if [[ " ${partners[@]} " =~ " ${partner_in_file} " ]]; then
+              echo "Approved partner name '$partner_in_file' found in $file"
+              approved_partner_found=true
+            else
+              echo "Forbidden partner name '$partner_in_file' found in $file"
+              approved_partner_found=false
             fi
-          done
-        done
         
-        if [ "$forbidden_partner_found" = true ]; then
-          echo "One or more forbidden partner names found in the files."
-          exit 1
-        else
+          else
+            echo "No relevant partner name pattern found in $file"
+            approved_partner_found=true  
+          fi
+          
+          if [ "$approved_partner_found" = false ]; then
+            echo "Forbidden partner name found in $file."
+            exit 1
+          else
           echo "No forbidden partner names found in the files."
         fi
+
       shell: bash
