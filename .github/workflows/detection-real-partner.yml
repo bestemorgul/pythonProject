@@ -46,14 +46,15 @@ jobs:
         for file in "${changed_files[@]}"; do
           echo "Checking $file"
           
-          if grep -q 'settings\.env_variables\[SettingKeys\.PARTNER_NAME\]\s*=\s*"sideautomation1"' "$file"; then
-              echo "Partner 'sideautomation1' found in $file"
+          if grep -q 'settings\.env_variables\[SettingKeys\.PARTNER_NAME\]\s*=\s*"' "$file"; then
+              partner_in_file=$(grep -oP 'settings\.env_variables\[SettingKeys\.PARTNER_NAME\]\s*=\s*"\K[^"]+' "$file")
+              echo "Partner found in $file: $partner_in_file"
               
-              if [[ " ${partners[@]} " =~ " sideautomation1 " ]]; then
-                  echo "Approved partner name 'sideautomation1' found in $file"
+              if [[ " ${partners[@]} " =~ " ${partner_in_file} " ]]; then
+                  echo "Approved partner name '$partner_in_file' found in $file"
                   approved_partner_found=true
               else
-                  echo "Forbidden partner name 'sideautomation1' found in $file"
+                  echo "Forbidden partner name '$partner_in_file' found in $file"
                   exit 1
               fi
           else
@@ -68,4 +69,5 @@ jobs:
           exit 1
         fi
       shell: bash
+
 
