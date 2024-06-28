@@ -30,15 +30,8 @@ jobs:
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
-        partners=(
-          "inshoppingcart" "gluautomation1" "gluautomation2" "gluautomation3" "gluautomation4"
-          "mobileautomation" "mobileautomation2" "mobileautomation3" "mobileautomation4" "mobileautomation5"
-          "qaautomation1" "qaautomation2" "qaautomation3" "qaautomation4" "qaautomation5" "roiautomation"
-          "seleniumautomation" "seleniumautomation1" "seleniumautomation2" "seleniumautomation3" "sideautomation"
-          "sideautomation1" "sideautomation2" "sideautomation3" "sideautomation4" "sideautomation5" "eurekatest"
-          "websuitetest1" "websuitetest2" "websuitetest3" "vikingsankara" "singlepageqa" "ozaspava" "testqa"
-          "shopbagg" "newsletteruat" "setupwizard" "hellokitty" "roiautomation"
-        )
+        set -e
+        partners="inshoppingcart gluautomation1 gluautomation2 gluautomation3 gluautomation4
 
         IFS=$'\n' read -r -d '' -a changed_files <<< "$ALL_CHANGED_FILES"
 
@@ -73,5 +66,7 @@ jobs:
         fi
 
       shell: bash
+
+
 
 
