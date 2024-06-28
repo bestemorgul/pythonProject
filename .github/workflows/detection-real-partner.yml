@@ -1,71 +1,52 @@
-name: Detection Real Partners
+name: Test File Validation
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, edited]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    paths:
+      - '**/tests/**'
 
 jobs:
-  check-partners:
+  validate-tests:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
-    - name: Get changed test files
-      id: changed-files
-      uses: tj-actions/changed-files@v36
-      with:
-        files: |
-          tests/**/*.py
+    - name: Find test files
+      run: |
+        mkdir -p test_files
+        find . -type f -path "*/tests/*" -name "*.py" -exec cp {} test_files/ \;
 
-    - name: Print changed files
-      run: echo "${{ steps.changed-files.outputs.all_changed_files }}"
-
-    - name: Check for real partner names in changed test files
-      if: steps.changed-files.outputs.all_changed_files != ''
-      env:
-        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+    - name: Check test files for partner names
       run: |
         set -e
-        partners="inshoppingcart gluautomation1 gluautomation2 gluautomation3 gluautomation4"
+        PARTNER_NAMES="A B C D E"
+        ERROR_FOUND=0
 
-        IFS=$'\n' read -r -d '' -a changed_files <<< "$ALL_CHANGED_FILES"
-
-        echo "Changed files: ${changed_files[@]}"
-      
-        for file in "${changed_files[@]}"; do
-          echo "Checking $file"
-          approved_partner_found=false
-          
-          if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$file"; then
-            partner_in_file=$(grep -oP 'settings\.env_variables\[SettingKeys\.PARTNER_NAME\]\s*=\s*"\K[^"]+' "$file")
-            echo "Partner found in $file: $partner_in_file"
-
-            if [[ " ${partners[@]} " =~ " ${partner_in_file} " ]]; then
-              echo "Approved partner name '$partner_in_file' found in $file"
-              approved_partner_found=true
+        for FILE in test_files/*.py; do
+          if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE"; then
+            PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE" | sed 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/')
+            if [[ "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
+              echo "File $FILE has a valid partner name: $PARTNER_NAME"
             else
-              echo "Forbidden partner name '$partner_in_file' found in $file"
-              approved_partner_found=false
+              echo "File $FILE has an invalid partner name: $PARTNER_NAME"
+              ERROR_FOUND=1
             fi
-        
           else
-            echo "No relevant partner name pattern found in $file"
-            approved_partner_found=true  
+            echo "File $FILE does not contain the partner name setting."
           fi
-          
-        if [ "$approved_partner_found" = false ]; then
-            echo "Forbidden partner name found in $file."
-            exit 1
-          else
-          echo "No forbidden partner names found in the files."
+        done
+
+        if [ $ERROR_FOUND -eq 1 ]; then
+          echo "One or more files contain invalid partner names."
+          exit 1
         fi
 
-      shell: bash
+    - name: Success
+      if: success()
+      run: echo "All test files are valid."
+
 
 
 
