@@ -25,7 +25,7 @@ jobs:
     - name: Print changed files
       run: echo "${{ steps.changed-files.outputs.all_changed_files }}"
 
-    - name: Check for specific partner names in changed files
+    - name: Check for specific partner names and URLs in changed files
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
@@ -69,6 +69,7 @@ jobs:
         else
           echo "All test files are valid."
         fi
+
 
 
 
