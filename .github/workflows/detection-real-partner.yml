@@ -37,7 +37,7 @@ jobs:
           if [ -f "$FILE" ]; then
             # Check for SettingKeys.PARTNER_NAME
             if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE"; then
-              PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE" | sed 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/')
+              PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p')
               if [[ " $PARTNER_NAMES " =~ " $PARTNER_NAME " ]]; then
                 echo "File $FILE has a valid partner name: $PARTNER_NAME"
               else
@@ -49,8 +49,8 @@ jobs:
             fi
 
             # Check for partner_url
-            if grep -q 'partner_url = "https:/' "$FILE"; then
-              PARTNER_URL=$(grep 'partner_url = "https:/' "$FILE" | awk -F'[/:]' '{print $4}')
+            if grep -q 'partner_url = "https://.*/inone.insidethekube.com/"' "$FILE"; then
+              PARTNER_URL=$(grep 'partner_url = "https://.*/inone.insidethekube.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\([^/]*\)\.inone\.insidethekube\.com\/".*/\1/p')
               if [[ " $PARTNER_NAMES " =~ " $PARTNER_URL " ]]; then
                 echo "File $FILE has a valid partner URL: $PARTNER_URL"
               else
@@ -69,6 +69,7 @@ jobs:
         else
           echo "All test files are valid."
         fi
+
 
 
 
