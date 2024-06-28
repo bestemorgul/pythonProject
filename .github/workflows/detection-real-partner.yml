@@ -35,6 +35,7 @@ jobs:
 
         for FILE in $ALL_CHANGED_FILES; do
           if [ -f "$FILE" ]; then
+            # Check for SettingKeys.PARTNER_NAME
             if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE"; then
               PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE" | sed 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/')
               if [[ "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
@@ -46,15 +47,29 @@ jobs:
             else
               echo "File $FILE does not contain the partner name setting."
             fi
+
+            # Check for partner_url
+            if grep -q 'partner_url = "https:/partner.inone.insidethekube.com/' "$FILE"; then
+              PARTNER_URL=$(grep 'partner_url = "https:/partner.inone.insidethekube.com/' "$FILE" | sed 's/.*partner_url = "https:\/\/partner.inone.insidethekube.com\/\(.*\)\/".*/\1/')
+              if [[ "$PARTNER_NAMES" =~ "$PARTNER_URL" ]]; then
+                echo "File $FILE has a valid partner URL: $PARTNER_URL"
+              else
+                echo "File $FILE has an invalid partner URL: $PARTNER_URL"
+                ERROR_FOUND=1
+              fi
+            else
+              echo "File $FILE does not contain the partner URL setting."
+            fi
           fi
         done
 
         if [ $ERROR_FOUND -eq 1 ]; then
-          echo "One or more files contain invalid partner names."
+          echo "One or more files contain invalid partner names or URLs."
           exit 1
         else
           echo "All test files are valid."
         fi
+
 
 
 

@@ -1,5 +1,5 @@
 class TestCheckSmartJourneySelectChannel():
-    settings.env_variables[SettingKeys.PARTNER_NAME] = "B"
+    partner_url = "https:/partner.inone.insidethekube.com/"
     """Test case is:
 
        1. Click Create button in architect page
