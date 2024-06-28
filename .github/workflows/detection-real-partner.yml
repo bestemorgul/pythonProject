@@ -46,6 +46,7 @@ jobs:
       
         for file in "${changed_files[@]}"; do
           echo "Checking $file"
+          approved_partner_found=false
           
           if grep -q 'settings\.env_variables\[SettingKeys\.PARTNER_NAME\]\s*=\s*"' "$file"; then
             partner_in_file=$(grep -oP 'settings\.env_variables\[SettingKeys\.PARTNER_NAME\]\s*=\s*"\K[^"]+' "$file")
@@ -64,7 +65,7 @@ jobs:
             approved_partner_found=true  
           fi
           
-          if [ "$approved_partner_found" = false ]; then
+        if [ "$approved_partner_found" = false ]; then
             echo "Forbidden partner name found in $file."
             exit 1
           else
