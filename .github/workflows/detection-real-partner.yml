@@ -31,7 +31,7 @@ jobs:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
         partners=(
-          "inshoppingcart" "gluautomation1" "gluautomation2" "gluautomation3" "gluautomation4"
+          'inshoppingcart' "gluautomation1" "gluautomation2" "gluautomation3" "gluautomation4"
           "mobileautomation" "mobileautomation2" "mobileautomation3" "mobileautomation4" "mobileautomation5"
           "qaautomation1" "qaautomation2" "qaautomation3" "qaautomation4" "qaautomation5" "roiautomation"
           "seleniumautomation" "seleniumautomation1" "seleniumautomation2" "seleniumautomation3" "sideautomation"
