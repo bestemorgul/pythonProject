@@ -58,19 +58,13 @@ jobs:
             else
               echo "Forbidden partner name '$partner_in_file' found in $file"
               approved_partner_found=false
+              exit 1
             fi
         
           else
             echo "No relevant partner name pattern found in $file"
             approved_partner_found=true  
           fi
-          
-        if [ "$approved_partner_found" = false ]; then
-            echo "Forbidden partner name found in $file."
-            exit 1
-          else
-          echo "No forbidden partner names found in the files."
-        fi
 
       shell: bash
 
