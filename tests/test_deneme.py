@@ -1,5 +1,5 @@
 class TestCheckSmartJourneySelectChannel():
-    settings.env_variables[SettingKeys.PARTNER_NAME] = "A"
+    settings.env_variables[SettingKeys.PARTNER_NAME] = "heps"
     """Test case is:
 
        1. Click Create button in architect page
