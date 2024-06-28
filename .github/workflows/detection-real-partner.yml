@@ -49,16 +49,8 @@ jobs:
             fi
 
             # Check for partner_url
-            if grep -q 'partner_url = "https://.*/inone.insidethekube.com/"' "$FILE"; then
-              PARTNER_URL=$(grep 'partner_url = "https://.*/inone.insidethekube.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\([^/]*\)\.inone\.insidethekube\.com\/".*/\1/p')
-              if [[ " $PARTNER_NAMES " =~ " $PARTNER_URL " ]]; then
-                echo "File $FILE has a valid partner URL: $PARTNER_URL"
-              else
-                echo "File $FILE has an invalid partner URL: $PARTNER_URL"
-                ERROR_FOUND=1
-              fi
-            elif grep -q 'partner_url = "https://.*/inone.insidethekube.com/"' "$FILE"; then
-              PARTNER_URL=$(grep 'partner_url = "https://.*/inone.insidethekube.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\([^/]*\)\.inone\.insidethekube\.com\/".*/\1/p')
+            if grep -q 'partner_url = "https://[^/]*\.inone\.insidethekube\.com/' "$FILE"; then
+              PARTNER_URL=$(grep 'partner_url = "https://[^/]*\.inone\.insidethekube\.com/' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\([^/]*\)\.inone\.insidethekube\.com\/.*/\1/p')
               if [[ " $PARTNER_NAMES " =~ " $PARTNER_URL " ]]; then
                 echo "File $FILE has a valid partner URL: $PARTNER_URL"
               else
