@@ -1,51 +1,61 @@
-name: Test File Validation
+name: Detection Real Partners
 
 on:
   pull_request:
-    paths:
-      - '**/tests/**'
+    types: [opened, synchronize, reopened, edited]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  validate-tests:
+  check-partners:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    - name: Find test files
-      run: |
-        mkdir -p test_files
-        find . -type f -path "*/tests/*" -name "*.py" -exec cp {} test_files/ \;
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v36
+      with:
+        files: |
+          tests/**/*.py
 
-    - name: Check test files for partner names
+    - name: Print changed files
+      run: echo "${{ steps.changed-files.outputs.all_changed_files }}"
+
+    - name: Check for specific partner names in changed files
+      env:
+        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
         set -e
         PARTNER_NAMES="A B C D E"
         ERROR_FOUND=0
 
-        for FILE in test_files/*.py; do
-          if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE"; then
-            PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE" | sed 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/')
-            if [[ "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
-              echo "File $FILE has a valid partner name: $PARTNER_NAME"
+        for FILE in $ALL_CHANGED_FILES; do
+          if [ -f "$FILE" ]; then
+            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE"; then
+              PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE" | sed 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/')
+              if [[ "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
+                echo "File $FILE has a valid partner name: $PARTNER_NAME"
+              else
+                echo "File $FILE has an invalid partner name: $PARTNER_NAME"
+                ERROR_FOUND=1
+              fi
             else
-              echo "File $FILE has an invalid partner name: $PARTNER_NAME"
-              ERROR_FOUND=1
+              echo "File $FILE does not contain the partner name setting."
             fi
-          else
-            echo "File $FILE does not contain the partner name setting."
           fi
         done
 
         if [ $ERROR_FOUND -eq 1 ]; then
           echo "One or more files contain invalid partner names."
           exit 1
+        else
+          echo "All test files are valid."
         fi
 
-    - name: Success
-      if: success()
-      run: echo "All test files are valid."
 
 
 
