@@ -37,7 +37,7 @@ jobs:
           if [ -f "$FILE" ]; then
             if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE"; then
               PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$FILE" | sed 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/')
-              if [[ "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
+              if [[ "$PARTNER_NAME" == "" || "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
                 echo "File $FILE has a valid partner name: $PARTNER_NAME"
               else
                 echo "File $FILE has an invalid partner name: $PARTNER_NAME"
