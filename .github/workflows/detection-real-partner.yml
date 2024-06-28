@@ -41,7 +41,7 @@ jobs:
           echo "Checking $file"
           approved_partner_found=false
           
-          if grep -q 'settings\.env_variables\[SettingKeys\.PARTNER_NAME\]\s*=\s*"' "$file"; then
+          if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\]' "$file"; then
             partner_in_file=$(grep -oP 'settings\.env_variables\[SettingKeys\.PARTNER_NAME\]\s*=\s*"\K[^"]+' "$file")
             echo "Partner found in $file: $partner_in_file"
 
