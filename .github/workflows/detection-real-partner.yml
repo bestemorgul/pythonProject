@@ -50,7 +50,7 @@ jobs:
 
             # Check for partner_url
             if grep -q 'partner_url = "https:/' "$FILE"; then
-              PARTNER_URL=$(grep 'partner_url = "https:/' "$FILE" | awk -F'[/.]' '{print $4}')
+              PARTNER_URL=$(grep 'partner_url = "https:/' "$FILE" | awk -F'[/:]' '{print $4}')
               if [[ " $PARTNER_NAMES " =~ " $PARTNER_URL " ]]; then
                 echo "File $FILE has a valid partner URL: $PARTNER_URL"
               else
