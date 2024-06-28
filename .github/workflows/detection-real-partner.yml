@@ -31,7 +31,7 @@ jobs:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
         set -e
-        partners="inshoppingcart gluautomation1 gluautomation2 gluautomation3 gluautomation4
+        partners="inshoppingcart gluautomation1 gluautomation2 gluautomation3 gluautomation4"
 
         IFS=$'\n' read -r -d '' -a changed_files <<< "$ALL_CHANGED_FILES"
 
