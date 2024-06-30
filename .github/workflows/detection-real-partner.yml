@@ -49,6 +49,7 @@ jobs:
             else
               echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_NAME] = \"\". Success."
             fi
+        
             # Check for partner_url = "https://partner.inone.insidethekube.com/"
             if grep -q 'partner_url = "https://' "$FILE"; then
               PARTNER_URL=$(grep 'partner_url = "https://' "$FILE" | \
@@ -59,7 +60,12 @@ jobs:
                 echo "File $FILE has an invalid partner URL: $PARTNER_URL"
                 ERROR_FOUND=1
               fi
-      
+            else
+              echo "File $FILE does not contain partner_url = \"https://partner.inone.insidethekube.com/\. Success."
+            fi
+        
+            # Check for partner_url = "https://partner.inone.useinsider.com/"
+            if grep -q 'partner_url = "https://' "$FILE"; then
               PARTNER_URL=$(grep 'partner_url = "https://' "$FILE" | \
                 sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.useinsider.com\/".*/\1/p')
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_URL"($|[[:space:]]) ]]; then
@@ -69,8 +75,9 @@ jobs:
                 ERROR_FOUND=1
               fi
             else
-              echo "File $FILE does not contain partner_url = \"https://partner.inone.insidethekube.com/\" or partner_url = \"https://partner.inone.useinsider.com/\". Success."
+              echo "File $FILE does not contain partner_url = \"https://partner.inone.useinsider.com/\". Success."
             fi
+        
             # Check for partner_name = ""
             if grep -q 'partner_name = "' "$FILE"; then
               PARTNER_NAME=$(grep 'partner_name = "' "$FILE" |sed -n 's/.*partner_name = "\(.*\)".*/\1/p')
