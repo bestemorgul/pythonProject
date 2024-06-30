@@ -78,9 +78,9 @@ jobs:
             echo "Checking file: $FILE"
 
             # Check for settings.env_variables[SettingKeys.PARTNER_NAME] = ""
-            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE"; then
+            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = ".*"' "$FILE"; then
               PARTNER_NAME=$(
-                grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE" \
+                grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = ".*"' "$FILE" \
                 | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p'
               )
               echo "Found partner name in settings: $PARTNER_NAME"
@@ -112,9 +112,9 @@ jobs:
             fi
 
             # Check for settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = ""
-            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "' "$FILE"; then
+            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = ".*"' "$FILE"; then
               PARTNER_NAME_FOUND=$(
-                grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "' "$FILE" \
+                grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = ".*"' "$FILE" \
                 | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "\(.*\)".*/\1/p'
               )
               echo "Found partner name in PANEL URL: $PARTNER_NAME_FOUND"
@@ -138,6 +138,7 @@ jobs:
         else
           echo "All test files are valid."
         fi
+
 
 
 
