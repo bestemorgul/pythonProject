@@ -31,7 +31,7 @@ jobs:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
         set -e
-        PARTNER_NAMES="A B C D E"
+        PARTNER_NAMES="qaautomation1 B C D E"
         ERROR_FOUND=0
 
         for FILE in $ALL_CHANGED_FILES; do
