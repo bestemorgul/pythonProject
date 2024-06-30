@@ -1,8 +1,8 @@
 class TestCheckSmartJourneySelectChannel():
 
-    partner_url = "https://partner.inone.insidethekube.com/"
+    partner_url = "https://D.inone.insidethekube.com/"
+    partner_name = "B"
 
-    settings.env_variables[SettingKeys.PARTNER_NAME] = "Z"
 
     """Test case is:
 
