@@ -39,10 +39,6 @@ jobs:
         eurekatest websuitetest1 websuitetest2 websuitetest3 vikingsankara singlepageqa ozaspava testqa \
         shopbagg newsletteruat setupwizard hellokitty roiautomation"
         ERROR_FOUND=0
-
-        IFS=$'\n' read -r -d '' -a changed_files <<< "$ALL_CHANGED_FILES"
-
-        echo "Changed files: ${changed_files[@]}"
         
         for FILE in $ALL_CHANGED_FILES; do
           if [ -f "$FILE" ]; then
