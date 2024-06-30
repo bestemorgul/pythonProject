@@ -38,6 +38,7 @@ jobs:
         eurekatest websuitetest1 websuitetest2 websuitetest3 vikingsankara singlepageqa ozaspava testqa \
         shopbagg newsletteruat setupwizard hellokitty roiautomation"
         ERROR_FOUND=0
+        
         for FILE in $ALL_CHANGED_FILES; do
           if [ -f "$FILE" ]; then
             echo "Checking file: $FILE"
@@ -107,5 +108,7 @@ jobs:
         else
           echo "All test files are valid."
         fi
+
+      shell: bash
 
 
