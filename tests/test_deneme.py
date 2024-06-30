@@ -1,9 +1,6 @@
 class TestCheckSmartJourneySelectChannel():
 
-    settings.env_variables[SettingKeys.PARTNER_NAME] = "qaautomation1"
-    settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = "https://partner.inone.useinsider.com/"
-    partner_url = "https://partner.inone.useinsider.com/"
-    partner_name = "qaautomation1"
+
 
 
     """Test case is:
