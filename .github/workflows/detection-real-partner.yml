@@ -98,7 +98,7 @@ jobs:
               fi
           else
               echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_NAME] = \"\". Success."
-            fi
+          fi
         done
 
         if [ $ERROR_FOUND -eq 1 ]; then
