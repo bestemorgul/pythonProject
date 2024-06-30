@@ -1,4 +1,4 @@
-name: Detection Real Partners
+name: Check Test Files for Partner Names
 
 on:
   pull_request:
@@ -37,30 +37,35 @@ jobs:
         for FILE in $ALL_CHANGED_FILES; do
           if [ -f "$FILE" ]; then
             # Check for settings.env_variables[SettingKeys.PARTNER_NAME] = ""
-            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = ""' "$FILE"; then
-              PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = ""' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p')
-              if [[ -z "$PARTNER_NAME" || "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
+            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE"; then
+              PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p')
+              if [[ "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
                 echo "File $FILE has a valid partner name in settings: $PARTNER_NAME"
               else
                 echo "File $FILE has an invalid partner name in settings: $PARTNER_NAME"
                 ERROR_FOUND=1
               fi
             else
-              echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_NAME] = \"\"."
+              echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_NAME] = \"\". Success."
             fi
 
-            # Check for partner_name = ""
-            if grep -q 'partner_name = ""' "$FILE"; then
-              echo "File $FILE has partner_name = \"\"."
+            # Check for partner_url = "https://partner.inone.insidethekube.com/"
+            if grep -q 'partner_url = "https://' "$FILE"; then
+              PARTNER_URL=$(grep 'partner_url = "https://' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.insidethekube.com\/".*/\1/p')
+              if [[ "$PARTNER_NAMES" =~ "$PARTNER_URL" ]]; then
+                echo "File $FILE has a valid partner URL: $PARTNER_URL"
+              else
+                echo "File $FILE has an invalid partner URL: $PARTNER_URL"
+                ERROR_FOUND=1
+              fi
             else
-              echo "File $FILE does not contain partner_name = \"\"."
-              ERROR_FOUND=1
+              echo "File $FILE does not contain partner_url = \"https://partner.inone.insidethekube.com/\". Success."
             fi
           fi
         done
 
         if [ $ERROR_FOUND -eq 1 ]; then
-          echo "One or more files contain invalid partner names or variables."
+          echo "One or more files contain invalid partner names or URLs."
           exit 1
         else
           echo "All test files are valid."
