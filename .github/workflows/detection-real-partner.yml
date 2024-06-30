@@ -60,8 +60,7 @@ jobs:
             if grep -q 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://' "$FILE"; then
               PARTNER_PANEL_URL=$(grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://'  "$FILE" | \
                sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https:\/\/\([^"]*\).inone.\
-              useinsider.com\/".*/\1/p'
-              )
+              useinsider.com\/".*/\1/p')
                if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_PANEL_URL"($|[[:space:]]) ]]; then
                  echo "File $FILE has a valid partner url in settings: $PARTNER_PANEL_URL"
                else
