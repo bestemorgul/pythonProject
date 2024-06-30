@@ -39,7 +39,6 @@ jobs:
             if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE"; then
               PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE" | \
                 sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p')
-              echo "Found partner name in settings: $PARTNER_NAME"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_NAME"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner name in settings: $PARTNER_NAME"
               else
@@ -48,6 +47,21 @@ jobs:
               fi
             else
               echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_NAME] = \"\". Success."
+            fi
+        
+        
+            # Check for settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = "" 
+            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://' "$FILE"; then
+              PARTNER_PANEL_URL=$(grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://'  "$FILE" | \
+                sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https:\/\/\(.*\).inone.useinsider.com\/".*/\1/p')
+               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_PANEL_URL"($|[[:space:]]) ]]; then
+                 echo "File $FILE has a valid partner url in settings: $PARTNER_PANEL_URL"
+               else
+                 echo "File $FILE has an invalid partner url in settings: $PARTNER_PANEL_URL"
+                 ERROR_FOUND=1
+               fi
+            else
+              echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_panel] = \"\". Success."
             fi
         
         
