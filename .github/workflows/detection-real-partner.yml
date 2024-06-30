@@ -57,7 +57,6 @@ jobs:
             if grep -q 'partner_url = "https://' "$FILE"; then
               PARTNER_URL=$(grep 'partner_url = "https://' "$FILE" | \
                 sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.insidethekube.com\/".*/\1/p')
-              echo "Found partner URL: $PARTNER_URL"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_URL"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner URL: $PARTNER_URL"
               else
@@ -67,7 +66,6 @@ jobs:
       
               PARTNER_URL=$(grep 'partner_url = "https://' "$FILE" | \
                 sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.useinsider.com\/".*/\1/p')
-              echo "Found partner URL: $PARTNER_URL"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_URL"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner URL: $PARTNER_URL"
               else
