@@ -9,123 +9,99 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v36
-      with:
-        files: |
-          tests/**/*.py
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v36
+        with:
+          files: |
+            tests/**/*.py
 
-    - name: Print changed files
-      run: echo "${{ steps.changed-files.outputs.all_changed_files }}"
+      - name: Print changed files
+        run: echo "${{ steps.changed-files.outputs.all_changed_files }}"
 
-    - name: Check for partner_name = "" and settings.env_variables[SettingKeys.PARTNER_NAME] = ""
-      env:
-        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-      run: |
-        set -e
-        PARTNER_NAMES="inshoppingcart gluautomation1 gluautomation2 gluautomation3 gluautomation4 mobileautomation mobileautomation2 mobileautomation3 mobileautomation4 mobileautomation5 qaautomation1 qaautomation2 qaautomation3 qaautomation4 qaautomation5 roiautomation seleniumautomation seleniumautomation1 seleniumautomation2 seleniumautomation3 sideautomation sideautomation1 sideautomation2 sideautomation3 sideautomation4 sideautomation5 eurekatest websuitetest1 websuitetest2 websuitetest3 vikingsankara singlepageqa ozaspava testqa shopbagg newsletteruat setupwizard hellokitty roiautomation"
-        ERROR_FOUND=0
+      - name: Check for partner_name = "" and settings.env_variables[SettingKeys.PARTNER_NAME] = ""
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          set -e
+          PARTNER_NAMES="inshoppingcart gluautomation1 gluautomation2 gluautomation3 gluautomation4 mobileautomation mobileautomation2 mobileautomation3 mobileautomation4 mobileautomation5 qaautomation1 qaautomation2 qaautomation3 qaautomation4 qaautomation5 roiautomation seleniumautomation seleniumautomation1 seleniumautomation2 seleniumautomation3 sideautomation sideautomation1 sideautomation2 sideautomation3 sideautomation4 sideautomation5 eurekatest websuitetest1 websuitetest2 websuitetest3 vikingsankara singlepageqa ozaspava testqa shopbagg newsletteruat setupwizard hellokitty roiautomation"
+          ERROR_FOUND=0
 
-        for FILE in $ALL_CHANGED_FILES; do
-          if [ -f "$FILE" ]; then
-            # Check for partner_name = ""
-            if grep -q 'partner_name = ""' "$FILE"; then
-              PARTNER_NAME=$(grep 'partner_name = ""' "$FILE" | sed -n 's/.*partner_name = "\(.*\)".*/\1/p')
-              if [[ -z "$PARTNER_NAME" || "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
-                echo "Found valid partner name in partner_name = \"\" field: $PARTNER_NAME"
+          for FILE in $ALL_CHANGED_FILES; do
+            if [ -f "$FILE" ]; then
+              # Check for partner_name = ""
+              if grep -q 'partner_name = ""' "$FILE"; then
+                PARTNER_NAME=$(grep 'partner_name = ""' "$FILE" | sed -n 's/.*partner_name = "\(.*\)".*/\1/p')
+                if [[ -z "$PARTNER_NAME" || "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
+                  echo "Found valid partner name in partner_name = \"\" field: $PARTNER_NAME"
+                else
+                  echo "File $FILE has an invalid partner name in partner_name = \"\": $PARTNER_NAME"
+                  ERROR_FOUND=1
+                fi
               else
-                echo "File $FILE has an invalid partner name in partner_name = \"\": $PARTNER_NAME"
-                ERROR_FOUND=1
+                echo "File $FILE does not contain partner_name = \"\". Success."
               fi
-            else
-              echo "File $FILE does not contain partner_name = \"\". Success."
-            fi
 
-            # Check for settings.env_variables[SettingKeys.PARTNER_NAME] = ""
-            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = ""' "$FILE"; then
-              PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = ""' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p')
-              if [[ -z "$PARTNER_NAME" || "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
-                echo "Found valid partner name in settings.env_variables[SettingKeys.PARTNER_NAME] = \"\" field: $PARTNER_NAME"
+              # Check for settings.env_variables[SettingKeys.PARTNER_NAME] = ""
+              if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = ""' "$FILE"; then
+                PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = ""' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p')
+                if [[ -z "$PARTNER_NAME" || "$PARTNER_NAMES" =~ "$PARTNER_NAME" ]]; then
+                  echo "Found valid partner name in settings.env_variables[SettingKeys.PARTNER_NAME] = \"\" field: $PARTNER_NAME"
+                else
+                  echo "File $FILE has an invalid partner name in settings.env_variables[SettingKeys.PARTNER_NAME] = \"\": $PARTNER_NAME"
+                  ERROR_FOUND=1
+                fi
               else
-                echo "File $FILE has an invalid partner name in settings.env_variables[SettingKeys.PARTNER_NAME] = \"\": $PARTNER_NAME"
-                ERROR_FOUND=1
+                echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_NAME] = \"\". Success."
               fi
-            else
-              echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_NAME] = \"\". Success."
-            fi
 
-            # Check for partner_url = "https://partner.inone.insidethekube.com/"
-            if grep -q 'partner_url = "https://qaautomation1.inone.insidethekube.com/"' "$FILE"; then
-              PARTNER_URL=$(grep 'partner_url = "https://qaautomation1.inone.insidethekube.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.insidethekube.com\/".*/\1/p')
-              if [[ -z "$PARTNER_URL" || "$PARTNER_NAMES" =~ "$PARTNER_URL" ]]; then
-                echo "Found valid partner URL in partner_url = \"https://qaautomation1.inone.insidethekube.com/\" field: $PARTNER_URL"
+              # Check for partner_url = "https://partner.inone.insidethekube.com/"
+              if grep -q 'partner_url = "https://partner.inone.insidethekube.com/"' "$FILE"; then
+                PARTNER_URL=$(grep 'partner_url = "https://partner.inone.insidethekube.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.insidethekube.com\/".*/\1/p')
+                if [[ -z "$PARTNER_URL" || "$PARTNER_NAMES" =~ "$PARTNER_URL" ]]; then
+                  echo "Found valid partner URL in partner_url = \"https://partner.inone.insidethekube.com/\" field: $PARTNER_URL"
+                else
+                  echo "File $FILE has an invalid partner URL in partner_url = \"https://partner.inone.insidethekube.com/\": $PARTNER_URL"
+                  ERROR_FOUND=1
+                fi
               else
-                echo "File $FILE has an invalid partner URL in partner_url = \"https://qaautomation1.inone.insidethekube.com/\": $PARTNER_URL"
-                ERROR_FOUND=1
+                echo "File $FILE does not contain partner_url = \"https://partner.inone.insidethekube.com/\". Success."
               fi
-            else
-              echo "File $FILE does not contain partner_url = \"https://qaautomation1.inone.insidethekube.com/\". Success."
-            fi
 
-            # Check for partner_url = "https://partner.inone.useinsider.com/"
-            if grep -q 'partner_url = "https://qaautomation1.inone.useinsider.com/"' "$FILE"; then
-              PARTNER_URL=$(grep 'partner_url = "https://qaautomation1.inone.useinsider.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.useinsider.com\/".*/\1/p')
-              if [[ -z "$PARTNER_URL" || "$PARTNER_NAMES" =~ "$PARTNER_URL" ]]; then
-                echo "Found valid partner URL in partner_url = \"https://qaautomation1.inone.useinsider.com/\" field: $PARTNER_URL"
+              # Check for partner_url = "https://partner.inone.useinsider.com/"
+              if grep -q 'partner_url = "https://partner.inone.useinsider.com/"' "$FILE"; then
+                PARTNER_URL=$(grep 'partner_url = "https://partner.inone.useinsider.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.useinsider.com\/".*/\1/p')
+                if [[ -z "$PARTNER_URL" || "$PARTNER_NAMES" =~ "$PARTNER_URL" ]]; then
+                  echo "Found valid partner URL in partner_url = \"https://partner.inone.useinsider.com/\" field: $PARTNER_URL"
+                else
+                  echo "File $FILE has an invalid partner URL in partner_url = \"https://partner.inone.useinsider.com/\": $PARTNER_URL"
+                  ERROR_FOUND=1
+                fi
               else
-                echo "File $FILE has an invalid partner URL in partner_url = \"https://qaautomation1.inone.useinsider.com/\": $PARTNER_URL"
-                ERROR_FOUND=1
+                echo "File $FILE does not contain partner_url = \"https://partner.inone.useinsider.com/\". Success."
               fi
-            else
-              echo "File $FILE does not contain partner_url = \"https://qaautomation1.inone.useinsider.com/\". Success."
-            fi
 
-            # Check for settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = "https://partner.inone.useinsider.com/"
-            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://qaautomation1.inone.useinsider.com/"' "$FILE"; then
-              PARTNER_PANEL_URL=$(grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://qaautomation1.inone.useinsider.com/"' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "\(.*\)".*/\1/p')
-              if [[ -z "$PARTNER_PANEL_URL" || "$PARTNER_NAMES" =~ "$PARTNER_PANEL_URL" ]]; then
-                echo "Found valid partner name in settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://qaautomation1.inone.useinsider.com/\" field: $PARTNER_PANEL_URL"
+              # Check for settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = "https://partner.inone.useinsider.com/"
+              if grep -q 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://partner.inone.useinsider.com/"' "$FILE"; then
+                PARTNER_PANEL_URL=$(grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://partner.inone.useinsider.com/"' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "\(.*\)".*/\1/p')
+                if [[ -z "$PARTNER_PANEL_URL" || "$PARTNER_NAMES" =~ "$PARTNER_PANEL_URL" ]]; then
+                  echo "Found valid partner name in settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://partner.inone.useinsider.com/\" field: $PARTNER_PANEL_URL"
+                else
+                  echo "File $FILE has an invalid partner name in settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://partner.inone.useinsider.com/\": $PARTNER_PANEL_URL"
+                  ERROR_FOUND=1
+                fi
               else
-                echo "File $FILE has an invalid partner name in settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://qaautomation1.inone.useinsider.com/\": $PARTNER_PANEL_URL"
-                ERROR_FOUND=1
+                echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://partner.inone.useinsider.com/\". Success."
               fi
-            else
-              echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://qaautomation1.inone.useinsider.com/\". Success."
             fi
+          done
+
+          if [ $ERROR_FOUND -eq 1 ]; then
+            echo "One or more files contain invalid partner names or URLs."
+            exit 1
+          else
+            echo "All test files are valid."
           fi
-        done
-
-        if [ $ERROR_FOUND -eq 1 ]; then
-          echo "One or more files contain invalid partner names or URLs."
-          exit 1
-        else
-          echo "All test files are valid."
-        fi
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
