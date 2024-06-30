@@ -29,9 +29,8 @@ jobs:
     - name: Check for specific partner names in changed files
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-      run: |
-        set -e
-        PARTNER_NAMES="inshoppingcart \
+        PARTNER_NAMES: |
+          inshoppingcart \
           gluautomation1 \
           gluautomation2 \
           gluautomation3 \
@@ -69,8 +68,9 @@ jobs:
           newsletteruat \
           setupwizard \
           hellokitty \
-          roiautomation"
-        PARTNER_PANEL_URL="https://partner.inone.useinsider.com/"
+          roiautomation
+      run: |
+        set -e
         ERROR_FOUND=0
 
         for FILE in $ALL_CHANGED_FILES; do
@@ -83,7 +83,6 @@ jobs:
                 grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE" \
                 | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p'
               )
-
               echo "Found partner name in settings: $PARTNER_NAME"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_NAME"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner name in settings: $PARTNER_NAME"
@@ -101,7 +100,6 @@ jobs:
                 grep 'partner_url = "https://' "$FILE" \
                 | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.insidethekube.com\/".*/\1/p'
               )
-
               echo "Found partner URL: $PARTNER_URL_FOUND"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_URL_FOUND"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner URL: $PARTNER_URL_FOUND"
@@ -119,7 +117,6 @@ jobs:
                 grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "' "$FILE" \
                 | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "\(.*\)".*/\1/p'
               )
-
               echo "Found partner name in PANEL URL: $PARTNER_NAME_FOUND"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_NAME_FOUND"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner name in PANEL URL: $PARTNER_NAME_FOUND"
