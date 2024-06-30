@@ -14,7 +14,5 @@ class TestCheckSmartJourneySelectChannel():
         self.user_id = self.create_random_string(7)
         settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = "https://inshoppingcart.inone.useinsider.com/"
 
-    #     settings.env_variables[SettingKeys.PARTNER_NAME] = "qaautomation1"
-
     def tearDown(self):
         self.driver.quit()
