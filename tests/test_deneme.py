@@ -3,7 +3,7 @@ class TestCheckSmartJourneySelectChannel():
 
 
     partner_url = "https://qaautomation1.inone.useinsider.com/"
-    partner_url = "https://qaautomation1.inone.insidethekube.com/"
+    partner_url = "https://A.inone.insidethekube.com/"
     partner_name = "qaautomation1"
     settings.env_variables[SettingKeys.PARTNER_NAME] = "qaautomation1"
 
