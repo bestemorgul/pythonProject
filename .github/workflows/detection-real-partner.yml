@@ -59,42 +59,42 @@ jobs:
             fi
 
             # Check for partner_url = "https://partner.inone.insidethekube.com/"
-            if grep -q 'partner_url = "https://partner.inone.insidethekube.com/"' "$FILE"; then
-              PARTNER_URL=$(grep 'partner_url = "https://partner.inone.insidethekube.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.insidethekube.com\/".*/\1/p')
+            if grep -q 'partner_url = "https://qaautomation1.inone.insidethekube.com/"' "$FILE"; then
+              PARTNER_URL=$(grep 'partner_url = "https://qaautomation1.inone.insidethekube.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.insidethekube.com\/".*/\1/p')
               if [[ -z "$PARTNER_URL" || "$PARTNER_NAMES" =~ "$PARTNER_URL" ]]; then
-                echo "Found valid partner URL in partner_url = \"https://partner.inone.insidethekube.com/\" field: $PARTNER_URL"
+                echo "Found valid partner URL in partner_url = \"https://qaautomation1.inone.insidethekube.com/\" field: $PARTNER_URL"
               else
-                echo "File $FILE has an invalid partner URL in partner_url = \"https://partner.inone.insidethekube.com/\": $PARTNER_URL"
+                echo "File $FILE has an invalid partner URL in partner_url = \"https://qaautomation1.inone.insidethekube.com/\": $PARTNER_URL"
                 ERROR_FOUND=1
               fi
             else
-              echo "File $FILE does not contain partner_url = \"https://partner.inone.insidethekube.com/\". Success."
+              echo "File $FILE does not contain partner_url = \"https://qaautomation1.inone.insidethekube.com/\". Success."
             fi
 
             # Check for partner_url = "https://partner.inone.useinsider.com/"
-            if grep -q 'partner_url = "https://partner.inone.useinsider.com/"' "$FILE"; then
-              PARTNER_URL=$(grep 'partner_url = "https://partner.inone.useinsider.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.useinsider.com\/".*/\1/p')
+            if grep -q 'partner_url = "https://qaautomation1.inone.useinsider.com/"' "$FILE"; then
+              PARTNER_URL=$(grep 'partner_url = "https://qaautomation1.inone.useinsider.com/"' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.useinsider.com\/".*/\1/p')
               if [[ -z "$PARTNER_URL" || "$PARTNER_NAMES" =~ "$PARTNER_URL" ]]; then
-                echo "Found valid partner URL in partner_url = \"https://partner.inone.useinsider.com/\" field: $PARTNER_URL"
+                echo "Found valid partner URL in partner_url = \"https://qaautomation1.inone.useinsider.com/\" field: $PARTNER_URL"
               else
-                echo "File $FILE has an invalid partner URL in partner_url = \"https://partner.inone.useinsider.com/\": $PARTNER_URL"
+                echo "File $FILE has an invalid partner URL in partner_url = \"https://qaautomation1.inone.useinsider.com/\": $PARTNER_URL"
                 ERROR_FOUND=1
               fi
             else
-              echo "File $FILE does not contain partner_url = \"https://partner.inone.useinsider.com/\". Success."
+              echo "File $FILE does not contain partner_url = \"https://qaautomation1.inone.useinsider.com/\". Success."
             fi
 
             # Check for settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = "https://partner.inone.useinsider.com/"
-            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://partner.inone.useinsider.com/"' "$FILE"; then
-              PARTNER_PANEL_URL=$(grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://partner.inone.useinsider.com/"' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "\(.*\)".*/\1/p')
+            if grep -q 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://qaautomation1.inone.useinsider.com/"' "$FILE"; then
+              PARTNER_PANEL_URL=$(grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://qaautomation1.inone.useinsider.com/"' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "\(.*\)".*/\1/p')
               if [[ -z "$PARTNER_PANEL_URL" || "$PARTNER_NAMES" =~ "$PARTNER_PANEL_URL" ]]; then
-                echo "Found valid partner name in settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://partner.inone.useinsider.com/\" field: $PARTNER_PANEL_URL"
+                echo "Found valid partner name in settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://qaautomation1.inone.useinsider.com/\" field: $PARTNER_PANEL_URL"
               else
-                echo "File $FILE has an invalid partner name in settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://partner.inone.useinsider.com/\": $PARTNER_PANEL_URL"
+                echo "File $FILE has an invalid partner name in settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://qaautomation1.inone.useinsider.com/\": $PARTNER_PANEL_URL"
                 ERROR_FOUND=1
               fi
             else
-              echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://partner.inone.useinsider.com/\". Success."
+              echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://qaautomation1.inone.useinsider.com/\". Success."
             fi
           fi
         done
@@ -105,6 +105,7 @@ jobs:
         else
           echo "All test files are valid."
         fi
+
 
 
 
