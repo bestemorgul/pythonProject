@@ -41,7 +41,7 @@ jobs:
             # Check for settings.env_variables[SettingKeys.PARTNER_NAME] = ""
             if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE"; then
               PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p')
-              echo "Found partner name: $PARTNER_NAME"
+              echo "Found partner name in settings: $PARTNER_NAME"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_NAME"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner name in settings: $PARTNER_NAME"
               else
@@ -65,12 +65,9 @@ jobs:
             else
               echo "File $FILE does not contain partner_url = \"https://partner.inone.insidethekube.com/\". Success."
             fi
-          else
-            echo "File $FILE does not exist."
-          fi
         
-           # Check for partner_url = "https://partner.inone.useinsider.com/"
-           if grep -q 'partner_url = "https://' "$FILE"; then
+            # Check for partner_url = "https://partner.inone.useinsider.com/"
+            if grep -q 'partner_url = "https://' "$FILE"; then
               PARTNER_URL=$(grep 'partner_url = "https://' "$FILE" | sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.useinsider.com\/".*/\1/p')
               echo "Found partner URL: $PARTNER_URL"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_URL"($|[[:space:]]) ]]; then
@@ -79,25 +76,25 @@ jobs:
                 echo "File $FILE has an invalid partner URL: $PARTNER_URL"
                 ERROR_FOUND=1
               fi
-           else
-              echo "File $FILE does not contain partner_url = \"https://partner.inone.useinsider.com/\". Success."
-             fi
-          else
-            echo "File $FILE does not exist."
-        
-        
-          # Check for settings.env_variables[SettingKeys.PARTNER_NAME] = ""
-          if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE"; then
-              PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p')
+            else
+              echo "File $FILE does not contain partner_url = \"https://partner.inone.insidethekube.com/\". Success."
+            fi
+
+            # Check for partner_name = ""
+            if grep -q 'partner_name = "' "$FILE"; then
+              PARTNER_NAME=$(grep 'partner_name = "' "$FILE" | sed -n 's/.*partner_name = "\(.*\)".*/\1/p')
               echo "Found partner name: $PARTNER_NAME"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_NAME"($|[[:space:]]) ]]; then
-                echo "File $FILE has a valid partner name in settings: $PARTNER_NAME"
+                echo "File $FILE has a valid partner name: $PARTNER_NAME"
               else
-                echo "File $FILE has an invalid partner name in settings: $PARTNER_NAME"
+                echo "File $FILE has an invalid partner name: $PARTNER_NAME"
                 ERROR_FOUND=1
               fi
+            else
+              echo "File $FILE does not contain partner_name = \"\". Success."
+            fi
           else
-              echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_NAME] = \"\". Success."
+            echo "File $FILE does not exist."
           fi
         done
 
@@ -107,4 +104,5 @@ jobs:
         else
           echo "All test files are valid."
         fi
+
 
