@@ -108,7 +108,6 @@ jobs:
         else
           echo "All test files are valid."
         fi
-
-      shell: bash
+        
 
 
