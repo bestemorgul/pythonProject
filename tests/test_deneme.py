@@ -1,5 +1,7 @@
 class TestCheckSmartJourneySelectChannel():
 
+    partner_name = "Z"
+    settings.env_variables[SettingKeys.PARTNER_NAME] = "Z"
 
     """Test case is:
 
