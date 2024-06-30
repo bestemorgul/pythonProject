@@ -22,7 +22,6 @@ jobs:
       with:
         files: |
           tests/**/*.py
-
     - name: Print changed files
       run: echo "${{ steps.changed-files.outputs.all_changed_files }}"
 
@@ -33,11 +32,9 @@ jobs:
         set -e
         PARTNER_NAMES="qaautomation1 B C D E"
         ERROR_FOUND=0
-
         for FILE in $ALL_CHANGED_FILES; do
           if [ -f "$FILE" ]; then
             echo "Checking file: $FILE"
-
             # Check for settings.env_variables[SettingKeys.PARTNER_NAME] = ""
             if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE"; then
               PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE" | \
@@ -52,20 +49,18 @@ jobs:
             else
               echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_NAME] = \"\". Success."
             fi
-
-            # Check for partner_url = "https://partner.inone.insidethekube.com/" or partner_url = "https://partner.inone.useinsider.com/"
+            # Check for partner_url = "https://partner.inone.insidethekube.com/"
             if grep -q 'partner_url = "https://' "$FILE"; then
               PARTNER_URL=$(grep 'partner_url = "https://' "$FILE" | \
                 sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.insidethekube.com\/".*/\1/p')
-              echo "Found partner URL: $PARTNER_URL"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_URL"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner URL: $PARTNER_URL"
               else
                 echo "File $FILE has an invalid partner URL: $PARTNER_URL"
                 ERROR_FOUND=1
               fi
-    
-              PARTNER_URL=$(grep 'partner_url = "https://' "$FILE" | \ 
+      
+              PARTNER_URL=$(grep 'partner_url = "https://' "$FILE" | \
                 sed -n 's/.*partner_url = "https:\/\/\(.*\).inone.useinsider.com\/".*/\1/p')
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_URL"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner URL: $PARTNER_URL"
@@ -74,12 +69,11 @@ jobs:
                 ERROR_FOUND=1
               fi
             else
-              echo "File $FILE does not contain partner_url = \"https://partner.inone.insidethekube.com/\". Success."
+              echo "File $FILE does not contain partner_url = \"https://partner.inone.insidethekube.com/\" or partner_url = \"https://partner.inone.useinsider.com/\". Success."
             fi
-
             # Check for partner_name = ""
             if grep -q 'partner_name = "' "$FILE"; then
-              PARTNER_NAME=$(grep 'partner_name = "' "$FILE" | sed -n 's/.*partner_name = "\(.*\)".*/\1/p')
+              PARTNER_NAME=$(grep 'partner_name = "' "$FILE" |sed -n 's/.*partner_name = "\(.*\)".*/\1/p')
               echo "Found partner name: $PARTNER_NAME"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_NAME"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner name: $PARTNER_NAME"
@@ -94,7 +88,6 @@ jobs:
             echo "File $FILE does not exist."
           fi
         done
-
         if [ $ERROR_FOUND -eq 1 ]; then
           echo "One or more files contain invalid partner names or URLs."
           exit 1
