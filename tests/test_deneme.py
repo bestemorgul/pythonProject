@@ -22,7 +22,7 @@ class TestCheckSmartJourneySelectChannel():
     second_selected_channel_name = "Email"
 
     def setUp(self):
-        partner_url = "https://partner.inone.useinsider.com/"
+        partner_url = "https://hellokitty.inone.useinsider.com/"
         self.campaign_name = self.generate_campaign_name()
         self.user_id = self.create_random_string(7)
 
