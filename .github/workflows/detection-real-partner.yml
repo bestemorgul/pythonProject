@@ -40,7 +40,8 @@ jobs:
 
             # Check for settings.env_variables[SettingKeys.PARTNER_NAME] = ""
             if grep -q 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE"; then
-              PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE" | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p')
+              PARTNER_NAME=$(grep 'settings.env_variables\[SettingKeys.PARTNER_NAME\] = "' "$FILE" | \
+                sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_NAME\] = "\(.*\)".*/\1/p')
               echo "Found partner name in settings: $PARTNER_NAME"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_NAME"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner name in settings: $PARTNER_NAME"
