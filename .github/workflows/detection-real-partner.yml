@@ -29,7 +29,10 @@ jobs:
     - name: Check for specific partner names in changed files
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        PARTNER_NAMES: |
+
+      run: |
+        set -e
+        PARTNER_NAMES="
           inshoppingcart \
           gluautomation1 \
           gluautomation2 \
@@ -68,9 +71,7 @@ jobs:
           newsletteruat \
           setupwizard \
           hellokitty \
-          roiautomation
-      run: |
-        set -e
+          roiautomation"
         ERROR_FOUND=0
 
         for FILE in $ALL_CHANGED_FILES; do
