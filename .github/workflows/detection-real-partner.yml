@@ -71,7 +71,6 @@ jobs:
             # Check for partner_name = ""
             if grep -q 'partner_name = "' "$FILE"; then
               PARTNER_NAME=$(grep 'partner_name = "' "$FILE" |sed -n 's/.*partner_name = "\(.*\)".*/\1/p')
-              echo "Found partner name: $PARTNER_NAME"
               if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_NAME"($|[[:space:]]) ]]; then
                 echo "File $FILE has a valid partner name: $PARTNER_NAME"
               else
