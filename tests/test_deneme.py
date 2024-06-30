@@ -22,7 +22,7 @@ class TestCheckSmartJourneySelectChannel():
     second_selected_channel_name = "Email"
 
     def setUp(self):
-        settings.env_variables[SettingKeys.PARTNER_NAME] = "qaautomation1"
+        settings.env_variables[SettingKeys.PARTNER_NAME] = "ABC"
         self.campaign_name = self.generate_campaign_name()
         self.user_id = self.create_random_string(7)
 
