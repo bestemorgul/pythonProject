@@ -30,8 +30,6 @@ jobs:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
         set -e
-        PARTNER_NAMES="|
-        set -e
         PARTNER_NAMES="inshoppingcart gluautomation1 gluautomation2 gluautomation3 gluautomation4 \
         mobileautomation mobileautomation2 mobileautomation3 mobileautomation4 mobileautomation5 \
         qaautomation1 qaautomation2 qaautomation3 qaautomation4 qaautomation5 \
