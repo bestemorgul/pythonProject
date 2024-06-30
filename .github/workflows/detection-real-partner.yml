@@ -113,15 +113,15 @@ jobs:
 
             # Check for settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = ""
             if grep -q 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = ".*"' "$FILE"; then
-              PARTNER_NAME_FOUND=$(
+              PARTNER_PANEL_URL_FOUND=$(
                 grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = ".*"' "$FILE" \
                 | sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "\(.*\)".*/\1/p'
               )
-              echo "Found partner name in PANEL URL: $PARTNER_NAME_FOUND"
-              if [[ "$PARTNER_NAME_FOUND" != "" && "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_NAME_FOUND"($|[[:space:]]) ]]; then
-                echo "File $FILE has a valid partner name in PANEL URL: $PARTNER_NAME_FOUND"
+              echo "Found partner name in PANEL URL: $PARTNER_PANEL_URL_FOUND"
+              if [[ "$PARTNER_PANEL_URL_FOUND" != "" && "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_PANEL_URL_FOUND"($|[[:space:]]) ]]; then
+                echo "File $FILE has a valid partner name in PANEL URL: $PARTNER_PANEL_URL_FOUND"
               else
-                echo "File $FILE has an invalid partner name in PANEL URL: $PARTNER_NAME_FOUND"
+                echo "File $FILE has an invalid partner name in PANEL URL: $PARTNER_PANEL_URL_FOUND"
                 ERROR_FOUND=1
               fi
             else
