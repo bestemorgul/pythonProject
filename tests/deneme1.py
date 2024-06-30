@@ -12,6 +12,7 @@ class TestCheckSmartJourneySelectChannel():
     def setUp(self):
         self.campaign_name = self.generate_campaign_name()
         self.user_id = self.create_random_string(7)
+        settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = "https://A.inone.useinsider.com/"
 
     #     settings.env_variables[SettingKeys.PARTNER_NAME] = "qaautomation1"
 
