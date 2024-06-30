@@ -1,4 +1,4 @@
-name: Check Test Files for Partner Names
+name: Detection Real Partner
 
 on:
   pull_request:
