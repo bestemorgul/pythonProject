@@ -61,15 +61,17 @@ jobs:
         
             if grep -q 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://' "$FILE"; then
               PARTNER_PANEL_URL=$(grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://'  "$FILE" | \
-               sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https:\/\/\([^"]*\).inone.useinsider.com\/".*/\1/p')
+               sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https:\/\/\([^"]*\).inone.\(useinsider.com\|insidethekube.com\)\/".*/\1/p')
+              DOMAIN=$(grep 'settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https://' "$FILE" | \
+               sed -n 's/.*settings.env_variables\[SettingKeys.PARTNER_PANEL_URL\] = "https:\/\/.*\.inone\.\(useinsider.com\|insidethekube.com\)\/".*/\1/p')
                if [[ "$PARTNER_NAMES" =~ (^|[[:space:]])"$PARTNER_PANEL_URL"($|[[:space:]]) ]]; then
-                 echo "File $FILE has a valid partner url in settings: $PARTNER_PANEL_URL"
+                 echo "File $FILE has a valid partner panel URL in settings: $PARTNER_PANEL_URL.inone.$DOMAIN"
                else
-                 echo "File $FILE has an invalid partner panel URL in settings: $PARTNER_PANEL_URL"
+                 echo "File $FILE has an invalid partner panel URL in settings: $PARTNER_PANEL_URL.inone.$DOMAIN"
                  ERROR_FOUND=1
                fi
             else
-              echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"\". Success."
+              echo "File $FILE does not contain settings.env_variables[SettingKeys.PARTNER_PANEL_URL] = \"https://partner.inone.useinsider.com/\" or \"https://partner.inone.insidethekube.com/\". Success."
             fi
         
             if grep -q 'partner_url = "https://' "$FILE"; then
